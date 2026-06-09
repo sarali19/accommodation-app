@@ -18,8 +18,8 @@ export default function LoginModal() {
   const router = useRouter();
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
-
   const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -32,9 +32,8 @@ export default function LoginModal() {
   });
 
   const onSubmit = async (data: FieldValues) => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-
       const callback = await signIn("credentials", {
         ...data,
         redirect: false,
@@ -49,8 +48,6 @@ export default function LoginModal() {
       if (callback?.error) {
         toast.error(callback.error);
       }
-    } catch (error) {
-      toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
