@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import Button from "../Button";
 import { FcGoogle } from "react-icons/fc";
 import { AiFillGithub } from "react-icons/ai";
+import { signIn } from "next-auth/react";
 
 export default function RegisterModal() {
   const registerModal = useRegisterModal();
@@ -29,8 +30,8 @@ export default function RegisterModal() {
 
   // function called when form is submitted successfully
   const onSubmit = async (data: FieldValues) => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       await axios.post("/api/register", data);
       registerModal.onClose();
     } catch (error) {
@@ -60,8 +61,8 @@ export default function RegisterModal() {
   const footerContent = (
     <div className="flex flex-col gap-4 mt-3">
       <hr />
-      <Button outline label="Continue with Google" icon={FcGoogle} onClick={() => {}} />
-      <Button outline label="Continue with Github" icon={AiFillGithub} onClick={() => {}} />
+      <Button outline label="Continue with Google" icon={FcGoogle} onClick={() => signIn("google")} />
+      <Button outline label="Continue with Github" icon={AiFillGithub} onClick={() => signIn("github")} />
       <div className="text-neutral-500 text-center mt-4 font-light">
         <div className="flex flex-row items-center gap-2 justify-center">
           <div>Already have an account?</div>
@@ -80,7 +81,7 @@ export default function RegisterModal() {
       title="Register"
       actionLabel="Continue"
       onClose={registerModal.onClose}
-      onSubmit={handleSubmit(onSubmit)} //React Hook Form, validate the form and prepare the data before running my submit logic
+      onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
     />
