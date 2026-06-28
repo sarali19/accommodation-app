@@ -3,7 +3,7 @@
 import { signIn } from "next-auth/react";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import Modal from "./Modal";
 import Heading from "../Heading";
@@ -53,9 +53,14 @@ export default function LoginModal() {
     }
   };
 
+  const onToggle = useCallback(() => {
+    loginModal.onClose();
+    registerModal.onOpen();
+  }, [loginModal, registerModal]);
+
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Heading title="Welcome back" subtitle="Login to your account!" center />
+      <Heading title="Welcome back" subtitle="Log in to your account!" center />
       <Input id="email" label="Email" disabled={isLoading} register={register} errors={errors} required />
       <Input
         id="password"
@@ -76,9 +81,9 @@ export default function LoginModal() {
       <Button outline label="Continue with Github" icon={AiFillGithub} onClick={() => signIn("github")} />
       <div className="text-neutral-500 text-center mt-4 font-light">
         <div className="flex flex-row items-center gap-2 justify-center">
-          <div>Already have an account?</div>
-          <div className="text-neutral-800 cursor-pointer hover:underline" onClick={registerModal.onClose}>
-            Log in
+          <div>First time using WanderInn?</div>
+          <div className="text-neutral-800 cursor-pointer hover:underline" onClick={onToggle}>
+            Create an account
           </div>
         </div>
       </div>
